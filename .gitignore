@@ -10,5 +10,16 @@ wheels/
 # Virtual environments
 .venv
 
-# PDF documents
+# Generated database and index stores
+chroma_db/
+*.sqlite3
+*.sqlite3-*
+*.pkl
+
+# Evaluation reports and test caches
+data/eval_report.json
+.pytest_cache/
+.coverage
+
+# PDF documents and data uploads
 data/pdfs/
