@@ -1,11 +1,20 @@
 
-from langchain_core.vectorstores import InMemoryVectorStore
+import hashlib
+
+from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+
 from rag_langchain_chatbot.fileReader import read_multiple_pdfs
 
 
-# 1. Initialize the Sentence Transformers embedding model
+# Configuration
+PDF_DIRECTORY = "data/pdfs"
+CHROMA_DIRECTORY = "./chroma_db"
+COLLECTION_NAME = "claimeye_documents"
+
+
+# 1. Initialize embedding model
 embeddings = HuggingFaceEmbeddings(
     model_name="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
     model_kwargs={"device": "cpu"},
@@ -13,19 +22,21 @@ embeddings = HuggingFaceEmbeddings(
 )
 
 
-# 2. Initialize the vector store
-vector_store = InMemoryVectorStore(
-    embedding=embeddings
+# 2. Initialize persistent vector database
+vector_store = Chroma(
+    collection_name=COLLECTION_NAME,
+    embedding_function=embeddings,
+    persist_directory=CHROMA_DIRECTORY
 )
 
 
 # 3. Load PDF documents
-documents = read_multiple_pdfs("data/pdfs")
+documents = read_multiple_pdfs(PDF_DIRECTORY)
 
-print(f"Number of pages loaded: {len(documents)}")
+print(f"Pages loaded: {len(documents)}")
 
 
-# 4. Split documents into smaller chunks
+# 4. Split documents into chunks
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=1000,
     chunk_overlap=200,
@@ -34,24 +45,53 @@ text_splitter = RecursiveCharacterTextSplitter(
 
 chunks = text_splitter.split_documents(documents)
 
-print(f"Number of chunks generated: {len(chunks)}")
+print(f"Chunks generated: {len(chunks)}")
 
 
-# 5. Generate embeddings and store documents
-vector_store.add_documents(documents=chunks)
+# 5. Generate deterministic IDs
+def generate_chunk_id(document, index):
+    source = document.metadata.get("source", "")
+    page = document.metadata.get("page", "")
 
-print("Documents successfully embedded and stored!")
+    content = (
+        f"{source}|{page}|{index}|{document.page_content}"
+    )
+
+    return hashlib.sha256(
+        content.encode("utf-8")
+    ).hexdigest()
 
 
-# 6. Test semantic search
-results = vector_store.similarity_search(
-    query="What is the main objective of the ClaimEye AI project?",
-    k=3
+chunk_ids = [
+    generate_chunk_id(chunk, index)
+    for index, chunk in enumerate(chunks)
+]
+
+
+# 6. Insert only new chunks
+existing_ids = set(vector_store.get(ids=chunk_ids)["ids"])
+
+new_chunks = []
+new_ids = []
+
+for chunk, chunk_id in zip(chunks, chunk_ids):
+    if chunk_id not in existing_ids:
+        new_chunks.append(chunk)
+        new_ids.append(chunk_id)
+
+if new_chunks:
+    vector_store.add_documents(
+        documents=new_chunks,
+        ids=new_ids
+    )
+
+    print(f"{len(new_chunks)} new chunks indexed.")
+
+else:
+    print("All chunks are already indexed.")
+
+
+print(
+    f"Total chunks in ChromaDB: "
+    f"{vector_store._collection.count()}"
 )
-
-print("\nSearch Results:")
-
-for i, doc in enumerate(results, start=1):
-    print(f"\n--- Result {i} ---")
-    print(doc.page_content)
-    print("Metadata:", doc.metadata)
