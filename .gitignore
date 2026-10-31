@@ -22,4 +22,7 @@ data/eval_report.json
 .coverage
 
 # PDF documents and data uploads
-data/pdfs/
+data/*
+!data/.gitkeep
+!data/pdfs/
+data/pdfs/*
