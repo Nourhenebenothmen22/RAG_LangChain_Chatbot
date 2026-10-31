@@ -1,7 +1,7 @@
 """IBM Carbon Design System styling and CSS theme for Streamlit with Dark and Light mode support."""
 
 import streamlit as st
-from typing import Literal
+from typing import Literal, Optional
 
 ThemeMode = Literal["dark", "light"]
 
@@ -382,15 +382,35 @@ pre, code {{
 """
 
 
-def apply_carbon_theme(theme_mode: ThemeMode = "dark") -> None:
+def apply_carbon_theme(theme_mode: Optional[str] = None, *args, **kwargs) -> None:
     """Inject IBM Carbon Design System CSS styles into the current Streamlit page."""
-    st.markdown(get_carbon_css(theme_mode), unsafe_allow_html=True)
+    mode = "dark"
+    if theme_mode:
+        mode = theme_mode
+    elif args:
+        mode = str(args[0])
+    elif "theme_mode" in kwargs:
+        mode = str(kwargs["theme_mode"])
+    elif hasattr(st, "session_state") and "theme_mode" in st.session_state:
+        mode = st.session_state["theme_mode"]
+
+    st.markdown(get_carbon_css(mode), unsafe_allow_html=True)
 
 
-def render_carbon_header(theme_mode: ThemeMode = "dark") -> None:
+def render_carbon_header(theme_mode: Optional[str] = None, *args, **kwargs) -> None:
     """Render top enterprise header inspired by IBM Carbon Shell."""
-    mode_label = "🌙 Dark Mode" if theme_mode == "dark" else "☀️ Light Mode"
-    badge_mode_class = "badge-blue" if theme_mode == "dark" else "badge-green"
+    mode = "dark"
+    if theme_mode:
+        mode = theme_mode
+    elif args:
+        mode = str(args[0])
+    elif "theme_mode" in kwargs:
+        mode = str(kwargs["theme_mode"])
+    elif hasattr(st, "session_state") and "theme_mode" in st.session_state:
+        mode = st.session_state["theme_mode"]
+
+    mode_label = "🌙 Dark Mode" if mode == "dark" else "☀️ Light Mode"
+    badge_mode_class = "badge-blue" if mode == "dark" else "badge-green"
 
     st.markdown(f"""
         <div class="carbon-header">

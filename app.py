@@ -12,11 +12,16 @@ from typing import Dict, List
 
 import streamlit as st
 
+import importlib
 from rag_langchain_chatbot.config import get_settings
 from rag_langchain_chatbot.evaluation import RAGEvaluator
 from rag_langchain_chatbot.loaders import get_loader_registry
 from rag_langchain_chatbot.monitoring import get_metrics_tracker
 from rag_langchain_chatbot.pipeline import HybridRAGPipeline
+import rag_langchain_chatbot.ui.theme as theme_module
+
+# Force hot-reload of theme module across Streamlit re-runs
+importlib.reload(theme_module)
 from rag_langchain_chatbot.ui.theme import apply_carbon_theme, render_carbon_header
 
 logger = logging.getLogger(__name__)
@@ -101,8 +106,15 @@ with st.sidebar:
         st.rerun()
 
 # Apply Dynamic IBM Carbon Theme & Header
-apply_carbon_theme(st.session_state["theme_mode"])
-render_carbon_header(st.session_state["theme_mode"])
+try:
+    apply_carbon_theme(st.session_state.get("theme_mode", "dark"))
+except TypeError:
+    apply_carbon_theme()
+
+try:
+    render_carbon_header(st.session_state.get("theme_mode", "dark"))
+except TypeError:
+    render_carbon_header()
 
 # ==============================================================================
 # Main Navigation Tabs
