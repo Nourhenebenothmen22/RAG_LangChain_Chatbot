@@ -187,7 +187,7 @@ class DocumentSyncResponse(BaseModel):
 # ==============================================================================
 
 app = FastAPI(
-    title="ClaimEye Hybrid RAG API",
+    title="Kortex AI Hybrid RAG API",
     description="High-performance enterprise Hybrid RAG pipeline with pure LLM semantic routing and cross-encoder reranking",
     version="0.1.0",
 )
