@@ -254,23 +254,23 @@ export function DocumentManagerModal({
                 02 // ENTERPRISE KNOWLEDGE CORPUS
               </h2>
             </div>
-            <p className="text-[11px] text-ink-mutedLight dark:text-ink-mutedDark mt-0.5 font-sans">
+            <p className="text-xs text-ink-mutedLight dark:text-ink-mutedDark mt-0.5 font-sans">
               Corpus document ledger, incremental vector chunking & BM25 inverted index synchronizer.
             </p>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1.5 border border-border-light dark:border-border-dark hover:border-ink-primaryLight text-ink-mutedLight dark:text-ink-mutedDark hover:text-ink-primaryLight transition-colors"
+            className="p-1.5 border border-border-light dark:border-border-dark hover:border-ink-primaryLight text-ink-mutedLight dark:text-ink-mutedDark hover:text-ink-primaryLight focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Stats Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-[11px]">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-xs font-mono">
           <div>
-            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
               01 // DOCUMENTS
             </span>
             <span className="font-bold text-ink-primaryLight dark:text-ink-primaryDark text-sm">
@@ -278,7 +278,7 @@ export function DocumentManagerModal({
             </span>
           </div>
           <div>
-            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
               02 // VECTOR CHUNKS
             </span>
             <span className="font-bold text-cobalt-DEFAULT dark:text-cobalt-dark text-sm">
@@ -286,7 +286,7 @@ export function DocumentManagerModal({
             </span>
           </div>
           <div>
-            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
               03 // VDB STORAGE
             </span>
             <span className="font-bold text-ink-primaryLight dark:text-ink-primaryDark text-sm">
@@ -294,7 +294,7 @@ export function DocumentManagerModal({
             </span>
           </div>
           <div>
-            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+            <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
               04 // SYNCHRONIZATION
             </span>
             <span className="font-bold text-emerald-DEFAULT text-sm flex items-center space-x-1">
@@ -323,7 +323,7 @@ export function DocumentManagerModal({
         <div className="flex-1 overflow-y-auto p-5 space-y-6">
           {/* Drag & Drop Upload Zone */}
           <div>
-            <div className="flex items-center justify-between mb-2 text-[11px] text-ink-mutedLight dark:text-ink-mutedDark">
+            <div className="flex items-center justify-between mb-2 text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
               <span>UPLOAD NEW POLICY OR DOCUMENT</span>
               <span>MAX 50MB PER FILE</span>
             </div>
@@ -352,11 +352,11 @@ export function DocumentManagerModal({
               <p className="font-bold text-ink-primaryLight dark:text-ink-primaryDark mb-1">
                 Drop files here or click to browse
               </p>
-              <p className="text-[11px] font-sans text-ink-secondaryLight dark:text-ink-secondaryDark mb-3">
+              <p className="text-xs font-sans text-ink-secondaryLight dark:text-ink-secondaryDark mb-3">
                 Supported formats: PDF, DOCX, TXT, MD, CSV, JSON
               </p>
 
-              <div className="flex justify-center space-x-1.5 text-[10px]">
+              <div className="flex justify-center space-x-1.5 text-xs font-mono font-medium">
                 {SUPPORTED_EXTS.map((ext) => (
                   <span
                     key={ext}
@@ -371,7 +371,7 @@ export function DocumentManagerModal({
             {/* Staged Files Preview */}
             {selectedFiles.length > 0 && (
               <div className="mt-3 p-3 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-ink-primaryLight dark:text-ink-primaryDark">
+                <div className="flex items-center justify-between text-xs font-semibold text-ink-primaryLight dark:text-ink-primaryDark">
                   <span>QUEUE ({selectedFiles.length} FILES STAGED)</span>
                   <button
                     onClick={() => setSelectedFiles([])}
@@ -452,7 +452,7 @@ export function DocumentManagerModal({
                 <button
                   onClick={handleSyncCorpus}
                   disabled={isSyncing}
-                  className="h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT text-ink-primaryLight dark:text-ink-primaryDark flex items-center space-x-1.5 transition-colors disabled:opacity-50"
+                  className="h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark text-ink-primaryLight dark:text-ink-primaryDark flex items-center space-x-1.5 transition-colors disabled:opacity-50"
                   title="Force re-sync of all documents in data/ with Chroma and BM25"
                 >
                   <RefreshCw className={`w-3 h-3 ${isSyncing ? "animate-spin" : ""}`} />
@@ -473,7 +473,7 @@ export function DocumentManagerModal({
               <div className="border border-border-light dark:border-border-dark overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-[10px] text-ink-mutedLight dark:text-ink-mutedDark uppercase">
+                    <tr className="border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-xs text-ink-mutedLight dark:text-ink-mutedDark font-semibold uppercase">
                       <th className="p-2.5">DOCUMENT</th>
                       <th className="p-2.5">FORMAT</th>
                       <th className="p-2.5">SIZE</th>
@@ -528,11 +528,11 @@ export function DocumentManagerModal({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark flex items-center justify-between text-[11px] text-ink-mutedLight dark:text-ink-mutedDark">
+        <div className="p-4 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark flex items-center justify-between text-xs font-mono text-ink-mutedLight dark:text-ink-mutedDark">
           <span>KORTEX VDB LEDGER ENGINE // LOCAL PERSISTENCE</span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hover:border-ink-primaryLight text-ink-primaryLight dark:text-ink-primaryDark transition-colors font-semibold"
+            className="px-4 py-1.5 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hover:border-ink-primaryLight focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark text-ink-primaryLight dark:text-ink-primaryDark transition-colors font-semibold"
           >
             DISMISS
           </button>
