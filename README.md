@@ -1,4 +1,4 @@
-# ClaimEye — Enterprise Multilingual Hybrid RAG & Document Intelligence Platform
+# Kortex AI — Enterprise Multilingual Hybrid RAG & Document Intelligence Platform
 
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -14,7 +14,7 @@
 
 A production-grade, enterprise-scale **Multilingual Hybrid Retrieval-Augmented Generation (Hybrid RAG) and Document Intelligence Platform** designed specifically for high-stakes insurance claims, legal policies, and technical compliance.
 
-ClaimEye combines **structure-aware semantic chunking**, **dual-engine hybrid retrieval (Dense Vector + BM25Okapi)**, **dynamic query-adaptive Reciprocal Rank Fusion (RRF)**, **state-of-the-art multilingual neural reranking (`BAAI/bge-reranker-v2-m3`)**, **context compression & sentence deduplication**, **100% AI semantic intent & language routing**, and a bespoke **Swiss Editorial + Premium Enterprise SaaS Next.js 14 frontend**.
+Kortex AI combines **structure-aware semantic chunking**, **dual-engine hybrid retrieval (Dense Vector + BM25Okapi)**, **dynamic query-adaptive Reciprocal Rank Fusion (RRF)**, **state-of-the-art multilingual neural reranking (`BAAI/bge-reranker-v2-m3`)**, **context compression & sentence deduplication**, **100% AI semantic intent & language routing**, and a bespoke **Swiss Editorial + Premium Enterprise SaaS Next.js 14 frontend**.
 
 ---
 
@@ -53,8 +53,8 @@ Standard naive RAG implementations routinely fail in enterprise regulatory and i
 4. **Context Redundancy & Token Inflation**: Overlapping chunk borders cause retrieved context windows to repeat redundant sentences 3 to 5 times, increasing input prompt token costs by 20–30% and causing the LLM to get lost in the middle.
 5. **Hallucinations & Prompt Injection**: Under empty retrieval evidence, LLMs fabricate plausible clauses. Concurrently, adversarial user documents or inputs inject system overrides (`<system>`, `ignore previous instructions`), escaping prompt templates.
 
-### The ClaimEye Solution
-ClaimEye provides a resilient, grounded, and fully audited enterprise solution:
+### The Kortex AI Solution
+Kortex AI provides a resilient, grounded, and fully audited enterprise solution:
 - **Zero-Truncation Multilingual Ingestion**: Uses 512-token sequence capacity on `paraphrase-multilingual-mpnet-base-v2` coupled with structure-aware markdown table preservation and sentence boundary protection.
 - **Dynamic Query-Adaptive RRF**: Automatically adjusts sparse vs. dense channel weights based on whether the query contains exact numeric codes/identifiers or conceptual reasoning.
 - **BAAI/bge-reranker-v2-m3**: Upgraded 8192-token multilingual Cross-Encoder evaluating full cross-attention across queries and candidates in French, English, Arabic, and Tunisian dialect.
@@ -104,7 +104,7 @@ ClaimEye provides a resilient, grounded, and fully audited enterprise solution:
 
 The Next.js 14 frontend is crafted according to **Swiss Editorial + Premium Enterprise SaaS** principles:
 
-![ClaimEye UI Preview](docs/assets/rag_assistant_tab.png)
+![Kortex AI UI Preview](docs/assets/rag_assistant_tab.png)
 
 ### Key Frontend Capabilities
 - **Aesthetic Foundation**: High-contrast, warm off-white / ivory canvas (`#FAF9F6`), deep ink typography (`#121417`), sophisticated cobalt blue accents (`#1A56DB`), subtle neutral borders (`#E5E7EB`), and full light/dark theme persistence.
@@ -181,7 +181,7 @@ When a table spans across chunk boundaries, `SemanticHybridSplitter` **repeats t
 ### 2. Protected Sentence Segmentation
 Legal clauses and insurance contracts feature heavy abbreviation usage (`art. L. 113-8`, `al. 2`, `M. Dupont`, `Dr. Martin`, `e.g.`, `i.e.`) and decimal thresholds (`0.6`, `15,000.50 €`). Conventional sentence tokenizers break on every period.
 
-ClaimEye replaces this with regex placeholder masking:
+Kortex AI replaces this with regex placeholder masking:
 1. Valid abbreviations and numeric decimals are masked with zero-width token placeholders (`\u200B_ABBR_0\u200B`).
 2. Boundaries are split cleanly on sentence terminators: `.`, `?`, `!`, `؟` (Arabic question mark), `!`.
 3. Placeholders are restored without losing character integrity.
@@ -208,7 +208,7 @@ This resolves the silent 128-token truncation bug found in default SentenceTrans
 - **Sparse Channel**: Queries BM25Okapi with NFKD diacritic folding (e.g., `dégât` matches `degat`) and decimal comma normalization (`0,6` $\rightarrow$ `0.6`).
 
 ### 2. Dynamic Query-Adaptive RRF
-Instead of fixed static weights, ClaimEye calculates query-adaptive weights:
+Instead of fixed static weights, Kortex AI calculates query-adaptive weights:
 ```python
 # retrieve.py
 has_code_or_num = bool(re.search(r'\b[A-Za-z]{1,4}[-_]?\d+|\d+[.,]\d+', query))
@@ -233,7 +233,7 @@ The top $M$ fused candidates ($M=10$) are passed to `BAAI/bge-reranker-v2-m3`. U
 ## Semantic Intent, Routing & Conversational Condensation
 
 ### 1. 100% AI Semantic Intent Router (`router.py`)
-ClaimEye does not rely on fragile hardcoded regex rules. All queries are analyzed by an LLM structured output schema:
+Kortex AI does not rely on fragile hardcoded regex rules. All queries are analyzed by an LLM structured output schema:
 
 ```python
 class QueryAnalysis(BaseModel):
@@ -259,7 +259,7 @@ Assistant: "Le dossier est transféré automatiquement à la cellule anti-fraude
 
 ## Multi-Tier Security & Guardrails Architecture
 
-ClaimEye applies enterprise defense-in-depth:
+Kortex AI applies enterprise defense-in-depth:
 
 | Defense Tier | Mechanism | Implementation |
 | :--- | :--- | :--- |
@@ -524,7 +524,7 @@ data: {"event": "done", "total_latency_ms": 520.1}
 
 ## Benchmarking, LLM-as-a-Judge & Observability
 
-ClaimEye includes an automated evaluation harness in [`evaluation.py`](src/rag_langchain_chatbot/evaluation.py):
+Kortex AI includes an automated evaluation harness in [`evaluation.py`](src/rag_langchain_chatbot/evaluation.py):
 
 ### Quantitative & Qualitative Metrics
 1. **Faithfulness**: Sentence-level entailment checking verifying that every assertion in the generated response is strictly supported by retrieved `<retrieved_context>` chunks.
@@ -548,7 +548,7 @@ Execution runs automatically record:
 
 Measurements following end-to-end architecture upgrades:
 
-| Dimension / Metric | Baseline (Pre-Audit) | Production (ClaimEye Post-Audit) | Impact / Delta |
+| Dimension / Metric | Baseline (Pre-Audit) | Production (Kortex AI Post-Audit) | Impact / Delta |
 | :--- | :--- | :--- | :--- |
 | **Test Suite Coverage** | 25 passed | **95 passed (100%)** | **+70 tests (+280%)** |
 | **Semantic AI Routing Accuracy** | 0% (Regex / Static) | **100.0% (Zero Hardcoding)** | Full LCEL Pydantic routing |
@@ -567,7 +567,7 @@ Measurements following end-to-end architecture upgrades:
 
 ## Automated Test Suite Verification
 
-ClaimEye is backed by **95 automated tests** across 15 test suites:
+Kortex AI is backed by **95 automated tests** across 15 test suites:
 
 ```bash
 .venv/bin/pytest -v
