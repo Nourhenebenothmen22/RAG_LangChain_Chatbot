@@ -1,10 +1,6 @@
 """Tests for synchronization ledger, change detection, and deletion tracking."""
 
-import sqlite3
 from pathlib import Path
-
-import pytest
-from langchain_core.documents import Document
 
 from rag_langchain_chatbot.index import SyncLedger
 

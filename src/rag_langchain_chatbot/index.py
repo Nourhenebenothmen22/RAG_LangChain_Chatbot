@@ -6,17 +6,17 @@ import json
 import logging
 import sqlite3
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from rag_langchain_chatbot.bm25 import BM25Index
+from rag_langchain_chatbot.chunking import SemanticHybridSplitter
 from rag_langchain_chatbot.config import Settings, get_settings
 from rag_langchain_chatbot.loaders import (
     LoaderRegistry,
     compute_file_sha256,
-    compute_text_sha256,
     get_loader_registry,
 )
 from rag_langchain_chatbot.models import get_vector_store
@@ -28,10 +28,12 @@ def generate_deterministic_chunk_id(document: Document) -> str:
     """Generate a stable, content-derived ID for a document chunk.
     
     Format: sha256(source|page_or_record|content_hash)
-    Does not depend on volatile loop enumeration indices.
+    Explicitly handles page 0 without falsy coercion.
     """
     source = document.metadata.get("source", "")
-    page_or_record = document.metadata.get("page") or document.metadata.get("record_id") or ""
+    page = document.metadata.get("page")
+    record_id = document.metadata.get("record_id")
+    page_or_record = str(page) if page is not None else (str(record_id) if record_id is not None else "")
     content_hash = hashlib.sha256(document.page_content.encode("utf-8")).hexdigest()
     raw_key = f"{source}|{page_or_record}|{content_hash}"
     return hashlib.sha256(raw_key.encode("utf-8")).hexdigest()
@@ -112,6 +114,14 @@ class DocumentIndexer:
         self.registry = registry or get_loader_registry()
         self.vector_store = get_vector_store(self.settings)
         self.ledger = SyncLedger(self.settings.metrics_db_path)
+        self.semantic_splitter = SemanticHybridSplitter(
+            target_tokens=self.settings.chunk_target_tokens,
+            min_tokens=self.settings.chunk_min_tokens,
+            max_tokens=self.settings.chunk_max_tokens,
+            overlap_sentences=self.settings.chunk_overlap_sentences,
+            enable_breadcrumbs=self.settings.enable_context_breadcrumbs,
+            tokenizer_model_name=self.settings.embedding_model_name,
+        )
         self.text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.settings.chunk_size,
             chunk_overlap=self.settings.chunk_overlap,
@@ -143,12 +153,23 @@ class DocumentIndexer:
         return discovered
 
     def chunk_document(self, raw_docs: List[Document]) -> List[Document]:
-        """Split raw documents into chunks with deterministic IDs and preserved metadata."""
-        chunks = self.text_splitter.split_documents(raw_docs)
+        """Split raw documents into chunks with deterministic IDs, sibling linkage, and preserved metadata."""
+        try:
+            chunks = self.semantic_splitter.split_documents(raw_docs)
+        except Exception as e:
+            logger.warning("SemanticHybridSplitter encountered an error (%s); falling back to text_splitter", e)
+            chunks = self.text_splitter.split_documents(raw_docs)
+
         for chunk in chunks:
             chunk_id = generate_deterministic_chunk_id(chunk)
             chunk.metadata["chunk_id"] = chunk_id
             chunk.id = chunk_id
+
+        # Sibling chunk linkage for context window expansion
+        for idx, chunk in enumerate(chunks):
+            chunk.metadata["prev_chunk_id"] = chunks[idx - 1].metadata["chunk_id"] if idx > 0 else ""
+            chunk.metadata["next_chunk_id"] = chunks[idx + 1].metadata["chunk_id"] if idx < len(chunks) - 1 else ""
+
         return chunks
 
     def index_documents(self, force_reindex: bool = False) -> Dict[str, Any]:
