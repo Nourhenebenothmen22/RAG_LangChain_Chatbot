@@ -60,7 +60,7 @@ export function Sidebar({
               </span>
               <span className="w-1.5 h-1.5 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
             </div>
-            <p className="text-[10px] font-mono text-ink-mutedLight dark:text-ink-mutedDark tracking-wide mt-0.5">
+            <p className="text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark tracking-wide mt-0.5">
               ENTERPRISE INTELLIGENCE DOSSIER
             </p>
           </div>
@@ -81,13 +81,13 @@ export function Sidebar({
               onNewSession();
               if (window.innerWidth < 768) onClose();
             }}
-            className="w-full h-9 px-3 bg-ink-primaryLight dark:bg-ink-primaryDark text-canvas-light dark:text-canvas-dark font-mono text-xs font-semibold flex items-center justify-between hover:bg-cobalt-DEFAULT dark:hover:bg-cobalt-dark dark:hover:text-white transition-colors"
+            className="w-full h-9 px-3 bg-ink-primaryLight dark:bg-ink-primaryDark text-canvas-light dark:text-canvas-dark font-mono text-xs font-semibold flex items-center justify-between hover:bg-cobalt-DEFAULT dark:hover:bg-cobalt-dark dark:hover:text-white focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors"
           >
             <span className="flex items-center space-x-2">
               <Plus className="w-3.5 h-3.5" />
               <span>NEW INQUIRY</span>
             </span>
-            <span className="text-[10px] opacity-70">⌘N</span>
+            <span className="text-xs font-mono opacity-80">⌘N</span>
           </button>
 
           <button
@@ -95,19 +95,19 @@ export function Sidebar({
               onOpenDocuments();
               if (window.innerWidth < 768) onClose();
             }}
-            className="w-full h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark font-mono text-xs flex items-center justify-between transition-colors"
+            className="w-full h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark font-mono text-xs flex items-center justify-between transition-colors"
           >
             <span className="flex items-center space-x-2">
               <Database className="w-3.5 h-3.5 text-cobalt-DEFAULT dark:text-cobalt-dark" />
               <span>02 // KNOWLEDGE CORPUS</span>
             </span>
-            <span className="text-[10px] text-ink-mutedLight dark:text-ink-mutedDark">→</span>
+            <span className="text-xs text-ink-mutedLight dark:text-ink-mutedDark">→</span>
           </button>
         </div>
 
         {/* Section 01: Inquiries History */}
         <div className="flex-1 overflow-y-auto p-3 space-y-1">
-          <div className="flex items-center justify-between px-2 py-1.5 text-[10px] font-mono tracking-widest text-ink-mutedLight dark:text-ink-mutedDark uppercase border-b border-border-light dark:border-border-dark mb-2">
+          <div className="flex items-center justify-between px-2 py-1.5 text-xs font-mono font-semibold tracking-widest text-ink-mutedLight dark:text-ink-mutedDark uppercase border-b border-border-light dark:border-border-dark mb-2">
             <span>01 // INQUIRIES DOSSIER</span>
             <span>[{sessions.length.toString().padStart(2, "0")}]</span>
           </div>
@@ -137,14 +137,14 @@ export function Sidebar({
                   }`}
                 >
                   <div className="flex items-baseline space-x-2 truncate pr-2">
-                    <span className="text-[10px] text-ink-mutedLight dark:text-ink-mutedDark">
+                    <span className="text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
                       {(index + 1).toString().padStart(2, "0")}
                     </span>
                     <span className="truncate">{session.title || "Untitled Inquiry"}</span>
                   </div>
 
                   <div className="flex items-center space-x-1.5 flex-shrink-0">
-                    <span className="text-[10px] text-ink-mutedLight dark:text-ink-mutedDark group-hover:hidden">
+                    <span className="text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark group-hover:hidden">
                       {dateStr}
                     </span>
                     <button
@@ -162,8 +162,8 @@ export function Sidebar({
         </div>
 
         {/* Section 03: Architecture Telemetry */}
-        <div className="p-3 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark space-y-2">
-          <div className="text-[10px] tracking-wider uppercase text-ink-secondaryLight dark:text-ink-secondaryDark font-semibold">
+        <div className="p-3 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-xs font-mono text-ink-mutedLight dark:text-ink-mutedDark space-y-2">
+          <div className="text-xs tracking-wider uppercase text-ink-secondaryLight dark:text-ink-secondaryDark font-semibold">
             03 // SYSTEM ARCHITECTURE
           </div>
 
