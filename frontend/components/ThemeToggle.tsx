@@ -9,7 +9,7 @@ export function ThemeToggle() {
 
   useEffect(() => {
     setMounted(true);
-    const saved = localStorage.getItem("claimeye-theme") as "dark" | "light" | null;
+    const saved = (localStorage.getItem("kortex-theme") || localStorage.getItem("claimeye-theme")) as "dark" | "light" | null;
     if (saved) {
       setTheme(saved);
       if (saved === "light") {
@@ -27,7 +27,7 @@ export function ThemeToggle() {
   const toggleTheme = () => {
     const next = theme === "dark" ? "light" : "dark";
     setTheme(next);
-    localStorage.setItem("claimeye-theme", next);
+    localStorage.setItem("kortex-theme", next);
 
     if (next === "light") {
       document.documentElement.classList.remove("dark");
