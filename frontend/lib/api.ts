@@ -1,4 +1,4 @@
-/** Typed HTTP and SSE API Client for ClaimEye Hybrid RAG Backend */
+/** Typed HTTP and SSE API Client for Kortex AI Hybrid RAG Backend */
 
 import {
   DocumentDeleteResponse,

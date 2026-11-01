@@ -1,4 +1,4 @@
-/** Type definitions for ClaimEye Hybrid RAG Next.js Client */
+/** Type definitions for Kortex AI Hybrid RAG Next.js Client */
 
 export interface RetrievedChunk {
   rank: number;
