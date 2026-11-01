@@ -529,7 +529,7 @@ export function DocumentManagerModal({
 
         {/* Footer */}
         <div className="p-4 border-t border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark flex items-center justify-between text-[11px] text-ink-mutedLight dark:text-ink-mutedDark">
-          <span>CLAIMEYE VDB LEDGER ENGINE // LOCAL PERSISTENCE</span>
+          <span>KORTEX VDB LEDGER ENGINE // LOCAL PERSISTENCE</span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hover:border-ink-primaryLight text-ink-primaryLight dark:text-ink-primaryDark transition-colors font-semibold"
