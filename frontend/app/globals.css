@@ -1,0 +1,212 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,6..72,400;1,6..72,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --canvas: #FBFBFA;
+  --surface: #FFFFFF;
+  --surface-subtle: #F3F2EC;
+  --border: #E4E3DC;
+  --border-strong: #C8C7BC;
+  --ink-primary: #111215;
+  --ink-secondary: #4E515C;
+  --ink-muted: #848896;
+  --cobalt: #0038FF;
+  --cobalt-hover: #002DC9;
+  --cobalt-subtle: #EEF3FF;
+  --vermilion: #D9383A;
+}
+
+html.dark {
+  --canvas: #0C0D10;
+  --surface: #14161E;
+  --surface-subtle: #1A1D28;
+  --border: #222634;
+  --border-strong: #33374A;
+  --ink-primary: #F4F4F0;
+  --ink-secondary: #9BA0B0;
+  --ink-muted: #636777;
+  --cobalt: #3B72FF;
+  --cobalt-hover: #2960EF;
+  --cobalt-subtle: rgba(59, 114, 255, 0.14);
+  --vermilion: #EF4444;
+}
+
+/* Force pointer cursor on all clickable elements */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="checkbox"],
+[role="button"],
+.clickable {
+  cursor: pointer !important;
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Swiss Architectural Grid & Hairline Utilities */
+.hairline-border {
+  border: 1px solid var(--border);
+}
+
+.hairline-t {
+  border-top: 1px solid var(--border);
+}
+
+.hairline-b {
+  border-bottom: 1px solid var(--border);
+}
+
+.hairline-l {
+  border-left: 1px solid var(--border);
+}
+
+.hairline-r {
+  border-right: 1px solid var(--border);
+}
+
+/* Monospace Micro Label */
+.mono-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem; /* 11px */
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Swiss Crosshair Registration Marks */
+.registration-mark {
+  position: relative;
+}
+.registration-mark::before {
+  content: "+";
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  position: absolute;
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+/* Custom Scrollbar - Precision Minimal */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ink-muted);
+}
+
+/* Markdown prose rendering */
+.editorial-prose {
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.65;
+  color: var(--ink-primary);
+}
+
+.editorial-prose p {
+  margin-bottom: 0.85em;
+}
+
+.editorial-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.editorial-prose strong {
+  font-weight: 700;
+  color: var(--ink-primary);
+}
+
+.editorial-prose ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 0.85em;
+}
+
+.editorial-prose ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin-bottom: 0.85em;
+}
+
+.editorial-prose li {
+  margin-bottom: 0.3em;
+}
+
+.editorial-prose blockquote {
+  border-left: 2px solid var(--cobalt);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  font-style: italic;
+  color: var(--ink-secondary);
+}
+
+.editorial-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.8125rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.editorial-prose th {
+  border-bottom: 1px solid var(--ink-primary);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--ink-primary);
+}
+
+.editorial-prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.45rem 0.75rem;
+  color: var(--ink-secondary);
+}
+
+.editorial-prose code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8em;
+  padding: 0.15rem 0.35rem;
+  border-radius: 2px;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
+  color: var(--ink-primary);
+}
+
+.editorial-prose pre {
+  margin: 1rem 0;
+  padding: 0.875rem 1rem;
+  background-color: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8125rem;
+}
+
+.editorial-prose pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
