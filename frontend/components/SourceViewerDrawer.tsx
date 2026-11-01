@@ -55,7 +55,7 @@ export function SourceViewerDrawer({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 border border-border-light dark:border-border-dark hover:border-ink-primaryLight dark:hover:border-ink-primaryDark text-ink-mutedLight dark:text-ink-mutedDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark transition-colors"
+            className="p-1.5 border border-border-light dark:border-border-dark hover:border-ink-primaryLight dark:hover:border-ink-primaryDark text-ink-mutedLight dark:text-ink-mutedDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -74,7 +74,7 @@ export function SourceViewerDrawer({
               }`}
             >
               <span>RANK #{chunk.rank}</span>
-              <span className="text-[10px] opacity-75">({chunk.score.toFixed(3)})</span>
+              <span className="text-xs opacity-80 font-mono">({chunk.score.toFixed(3)})</span>
             </button>
           ))}
         </div>
@@ -110,9 +110,9 @@ export function SourceViewerDrawer({
               </div>
 
               {/* Technical Score Breakdown */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[11px]">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-xs font-mono">
                 <div>
-                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
                     FINAL RELEVANCE
                   </span>
                   <span className="font-bold text-cobalt-DEFAULT dark:text-cobalt-dark">
@@ -120,7 +120,7 @@ export function SourceViewerDrawer({
                   </span>
                 </div>
                 <div>
-                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
                     RERANK SCORE
                   </span>
                   <span className="font-semibold text-ink-primaryLight dark:text-ink-primaryDark">
@@ -130,7 +130,7 @@ export function SourceViewerDrawer({
                   </span>
                 </div>
                 <div>
-                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
                     RRF RECIPROCAL
                   </span>
                   <span className="font-semibold text-ink-primaryLight dark:text-ink-primaryDark">
@@ -140,7 +140,7 @@ export function SourceViewerDrawer({
                   </span>
                 </div>
                 <div>
-                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-[10px]">
+                  <span className="block text-ink-mutedLight dark:text-ink-mutedDark text-xs font-medium">
                     CHUNK HASH ID
                   </span>
                   <span className="font-semibold text-ink-mutedLight dark:text-ink-mutedDark truncate block max-w-[100px]">
