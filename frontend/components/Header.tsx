@@ -22,7 +22,7 @@ export function Header({
       <div className="flex items-center space-x-3 sm:space-x-4">
         <button
           onClick={onToggleSidebar}
-          className="p-1.5 md:hidden border border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark"
+          className="p-1.5 md:hidden border border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors"
           aria-label="Toggle Navigation Sidebar"
         >
           <Menu className="w-4 h-4" />
@@ -32,14 +32,14 @@ export function Header({
           <span className="font-extrabold text-sm tracking-tight text-ink-primaryLight dark:text-ink-primaryDark font-mono uppercase">
             Kortex AI
           </span>
-          <span className="hidden sm:inline-block text-[10px] font-mono text-ink-mutedLight dark:text-ink-mutedDark tracking-wider border-l border-border-light dark:border-border-dark pl-2.5">
+          <span className="hidden sm:inline-block text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark tracking-wider border-l border-border-light dark:border-border-dark pl-2.5">
             SYS.VER 02.4 // ENTERPRISE
           </span>
         </div>
       </div>
 
       {/* Center: Swiss Architecture Telemetry Pills */}
-      <div className="hidden lg:flex items-center space-x-4 text-[11px] font-mono text-ink-secondaryLight dark:text-ink-secondaryDark">
+      <div className="hidden lg:flex items-center space-x-4 text-xs font-mono font-medium text-ink-secondaryLight dark:text-ink-secondaryDark">
         <div className="flex items-center space-x-1.5">
           <span className="w-1.5 h-1.5 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
           <span>HYBRID RRF [K=60]</span>
@@ -61,7 +61,7 @@ export function Header({
         <button
           onClick={onOpenDocuments}
           title="Manage Knowledge Base Documents & Corpus"
-          className="h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark text-ink-primaryLight dark:text-ink-primaryDark text-xs font-mono flex items-center space-x-2 transition-colors"
+          className="h-8 px-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark text-ink-primaryLight dark:text-ink-primaryDark text-xs font-mono font-medium flex items-center space-x-2 transition-colors"
         >
           <Database className="w-3.5 h-3.5 text-cobalt-DEFAULT dark:text-cobalt-dark" />
           <span className="hidden sm:inline">KNOWLEDGE BASE</span>
@@ -71,7 +71,7 @@ export function Header({
           <button
             onClick={onClearChat}
             title="Reset Active Inquiry Dossier"
-            className="h-8 px-2.5 border border-border-light dark:border-border-dark hover:border-vermilion-DEFAULT text-ink-mutedLight dark:text-ink-mutedDark hover:text-vermilion-DEFAULT text-xs font-mono flex items-center space-x-1.5 transition-colors"
+            className="h-8 px-2.5 border border-border-light dark:border-border-dark hover:border-vermilion-DEFAULT focus:outline-none focus:ring-1 focus:ring-vermilion-DEFAULT text-ink-mutedLight dark:text-ink-mutedDark hover:text-vermilion-DEFAULT text-xs font-mono font-medium flex items-center space-x-1.5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">RESET</span>
