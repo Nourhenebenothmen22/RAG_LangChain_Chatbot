@@ -56,12 +56,12 @@ export function Sidebar({
           <div>
             <div className="flex items-center space-x-2">
               <span className="font-extrabold text-base tracking-tighter text-ink-primaryLight dark:text-ink-primaryDark uppercase">
-                CLAIMEYE
+                KORTEX AI
               </span>
               <span className="w-1.5 h-1.5 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
             </div>
             <p className="text-[10px] font-mono text-ink-mutedLight dark:text-ink-mutedDark tracking-wide mt-0.5">
-              INSURANCE INTELLIGENCE DOSSIER
+              ENTERPRISE INTELLIGENCE DOSSIER
             </p>
           </div>
 
