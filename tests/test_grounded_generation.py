@@ -2,13 +2,11 @@
 
 from unittest.mock import MagicMock
 
-import pytest
 from langchain_core.documents import Document
 
 from rag_langchain_chatbot.pipeline import (
     FALLBACK_UNAVAILABLE_MSG,
     HybridRAGPipeline,
-    RetrievedChunk,
 )
 from rag_langchain_chatbot.retrieve import reciprocal_rank_fusion
 
