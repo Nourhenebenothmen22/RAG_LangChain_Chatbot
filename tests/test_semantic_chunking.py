@@ -172,7 +172,7 @@ def test_semantic_hybrid_splitter_and_sibling_linkage():
 
     raw_doc = Document(
         page_content=(
-            "# Manuel des Sinistres ClaimEye\n"
+            "# Manuel de Documentation Kortex AI\n"
             "Introduction au processus d'indemnisation des sinistres.\n\n"
             "## Chapitre 2: Procédure d'Expertise\n"
             "Tout sinistre supérieur à 1 500 EUR nécessite la désignation d'un expert indépendant certifié. "
@@ -188,7 +188,7 @@ def test_semantic_hybrid_splitter_and_sibling_linkage():
     assert len(chunks) >= 2
 
     # Check breadcrumb injection
-    assert any("[manuel.md > Manuel des Sinistres ClaimEye" in c.page_content for c in chunks)
+    assert any("[manuel.md > Manuel de Documentation Kortex AI" in c.page_content for c in chunks)
     
     # Check metadata fields
     for c in chunks:
