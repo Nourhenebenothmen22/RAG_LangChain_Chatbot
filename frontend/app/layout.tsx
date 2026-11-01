@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ClaimEye — Insurance Intelligence & Forensic Hybrid RAG",
-  description: "Swiss Editorial enterprise insurance intelligence engine powered by Hybrid RRF, Cross-Encoder reranking, and grounded policy validation.",
+  title: "Kortex AI — Enterprise Multilingual Hybrid RAG Platform",
+  description: "Swiss Editorial enterprise knowledge intelligence engine powered by Hybrid RRF, Cross-Encoder reranking, and grounded document validation.",
   icons: {
     icon: "/favicon.ico",
   },
@@ -22,7 +22,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  const stored = localStorage.getItem('claimeye-theme');
+                  const stored = localStorage.getItem('kortex-theme') || localStorage.getItem('claimeye-theme');
                   if (stored === 'light') {
                     document.documentElement.classList.remove('dark');
                     document.documentElement.classList.add('light');
