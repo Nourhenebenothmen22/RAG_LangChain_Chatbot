@@ -49,17 +49,17 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
       aria-label="Toggle visual theme"
-      className="h-8 px-2.5 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hover:border-cobalt dark:hover:border-cobalt-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark transition-colors flex items-center space-x-1.5 text-xs font-mono"
+      className="h-8 px-2.5 border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:text-ink-primaryLight dark:hover:text-ink-primaryDark transition-colors flex items-center space-x-1.5 text-xs font-mono font-medium"
     >
       {theme === "dark" ? (
         <>
           <Sun className="w-3.5 h-3.5 text-amber-DEFAULT" />
-          <span className="text-[10px] uppercase tracking-wider hidden sm:inline">Light</span>
+          <span className="text-xs uppercase tracking-wider hidden sm:inline">Light</span>
         </>
       ) : (
         <>
-          <Moon className="w-3.5 h-3.5 text-cobalt-DEFAULT" />
-          <span className="text-[10px] uppercase tracking-wider hidden sm:inline">Dark</span>
+          <Moon className="w-3.5 h-3.5 text-cobalt-DEFAULT dark:text-cobalt-dark" />
+          <span className="text-xs uppercase tracking-wider hidden sm:inline">Dark</span>
         </>
       )}
     </button>
