@@ -1,7 +1,7 @@
 [project]
 name = "rag-langchain-chatbot"
 version = "0.1.0"
-description = "High-performance database-driven Hybrid RAG pipeline with LangChain, LangSmith, and Cross-Encoder reranking"
+description = "Kortex AI: High-performance enterprise Multilingual Hybrid RAG platform with LangChain, ChromaDB, BM25, and Cross-Encoder reranking"
 readme = "README.md"
 authors = [
     { name = "Nourhene Ben Othmen", email = "benothmennourhen8@gmail.com" }
