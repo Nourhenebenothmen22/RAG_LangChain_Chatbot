@@ -28,14 +28,7 @@ export function Header({
           <Menu className="w-4 h-4" />
         </button>
 
-        <div className="flex items-center space-x-2.5">
-          <span className="font-extrabold text-sm tracking-tight text-ink-primaryLight dark:text-ink-primaryDark font-mono uppercase">
-            Kortex AI
-          </span>
-          <span className="hidden sm:inline-block text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark tracking-wider border-l border-border-light dark:border-border-dark pl-2.5">
-            SYS.VER 02.4 // ENTERPRISE
-          </span>
-        </div>
+
       </div>
 
       {/* Center: Swiss Architecture Telemetry Pills */}
