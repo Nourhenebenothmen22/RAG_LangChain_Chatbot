@@ -100,11 +100,35 @@ Kortex AI provides a resilient, grounded, and fully audited enterprise solution:
 
 ---
 
-## Swiss Editorial Enterprise Frontend
+## Swiss Editorial Enterprise Frontend Showcase
 
-The Next.js 14 frontend is crafted according to **Swiss Editorial + Premium Enterprise SaaS** principles:
+The Next.js 14 frontend is crafted according to **Swiss International Typographic Style** & **WCAG 2.1 AA/AAA** accessibility standards:
 
-![Kortex AI UI Preview](docs/assets/rag_assistant_tab.png)
+### 1. Enterprise Chat Workspace (Dark Mode)
+*Clean architectural layout with zero clutter, telemetry status, recommended inquiry dossiers, and parameters drawer (Hybrid RRF & Cross-Encoder).*
+
+![Kortex AI Chat Workspace](docs/assets/kortex_chat_workspace_dark.png)
+
+---
+
+### 2. Grounded Synthesis & Evidence Dossier
+*Token-by-token streaming with millisecond latency telemetry (`INTENT`, `LANG`, `LATENCY`, `TOKENS`), editorial Markdown typography, and cited evidence cards.*
+
+![Kortex AI RAG Synthesis & Evidence](docs/assets/kortex_rag_synthesis_evidence.png)
+
+---
+
+### 3. Source Provenance Inspection Drawer
+*Slide-over drawer providing 100% mathematical auditability: final cross-encoder score, RRF reciprocal rank, chunk SHA-256 ID, and verbatim passage text.*
+
+![Kortex AI Source Inspection Drawer](docs/assets/kortex_source_drawer.png)
+
+---
+
+### 4. Enterprise Knowledge Corpus Ledger
+*Corpus management modal featuring drag-and-drop ingestion (`.pdf`, `.docx`, `.txt`, `.csv`, `.json`), real-time chunk statistics, and dual-index synchronization (ChromaDB + BM25).*
+
+![Kortex AI Knowledge Corpus Ledger](docs/assets/kortex_knowledge_corpus_modal.png)
 
 ### Key Frontend Capabilities
 - **Aesthetic Foundation**: High-contrast, warm off-white / ivory canvas (`#FAF9F6`), deep ink typography (`#121417`), sophisticated cobalt blue accents (`#1A56DB`), subtle neutral borders (`#E5E7EB`), and full light/dark theme persistence.
