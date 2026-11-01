@@ -1,4 +1,4 @@
-"""Server entrypoint for ClaimEye Hybrid RAG FastAPI application."""
+"""Server entrypoint for Kortex AI Hybrid RAG FastAPI application."""
 
 import argparse
 import uvicorn
@@ -11,7 +11,7 @@ def run_server() -> None:
     parser.add_argument("--reload", action="store_true", help="Enable auto-reload for development")
     args = parser.parse_args()
 
-    print(f"Starting ClaimEye Hybrid RAG API server on http://{args.host}:{args.port}")
+    print(f"Starting Kortex AI Hybrid RAG API server on http://{args.host}:{args.port}")
     uvicorn.run("rag_langchain_chatbot.api:app", host=args.host, port=args.port, reload=args.reload)
 
 
