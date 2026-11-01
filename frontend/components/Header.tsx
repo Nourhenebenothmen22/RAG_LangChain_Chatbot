@@ -1,6 +1,6 @@
 "use client";
 
-import { Database, Menu, RotateCcw, Trash2 } from "lucide-react";
+import { Database, Menu, RotateCcw } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 interface HeaderProps {
@@ -18,7 +18,7 @@ export function Header({
 }: HeaderProps) {
   return (
     <header className="h-13 bg-surface-light dark:bg-surface-dark border-b border-border-light dark:border-border-dark sticky top-0 z-30 flex items-center justify-between px-4 sm:px-6 transition-colors">
-      {/* Left: Mobile Toggle & Brand Masthead */}
+      {/* Left: Mobile Sidebar Toggle */}
       <div className="flex items-center space-x-3 sm:space-x-4">
         <button
           onClick={onToggleSidebar}
@@ -27,26 +27,6 @@ export function Header({
         >
           <Menu className="w-4 h-4" />
         </button>
-
-
-      </div>
-
-      {/* Center: Swiss Architecture Telemetry Pills */}
-      <div className="hidden lg:flex items-center space-x-4 text-xs font-mono font-medium text-ink-secondaryLight dark:text-ink-secondaryDark">
-        <div className="flex items-center space-x-1.5">
-          <span className="w-1.5 h-1.5 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
-          <span>HYBRID RRF [K=60]</span>
-        </div>
-        <span className="text-border-strongLight dark:text-border-strongDark">/</span>
-        <div className="flex items-center space-x-1.5">
-          <span className="w-1.5 h-1.5 bg-emerald-DEFAULT" />
-          <span>CROSS-ENCODER [ACTIVE]</span>
-        </div>
-        <span className="text-border-strongLight dark:text-border-strongDark">/</span>
-        <div className="flex items-center space-x-1.5">
-          <span className="w-1.5 h-1.5 bg-ink-mutedLight dark:bg-ink-mutedDark" />
-          <span>SEMANTIC ROUTER</span>
-        </div>
       </div>
 
       {/* Right: Actions */}
