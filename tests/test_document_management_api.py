@@ -47,7 +47,7 @@ def test_upload_list_and_delete_document_lifecycle(client: TestClient):
     pipeline = get_pipeline()
     test_filename = "test_insurance_endorsement_temp.txt"
     test_content = (
-        "ClaimEye Endorsement Notice: All windshield glass damage under 200 EUR has zero deductible. "
+        "Kortex AI Endorsement Notice: All windshield glass damage under 200 EUR has zero deductible. "
         "Any comprehensive bodily injury claim exceeding 50000 EUR requires Senior Adjuster approval."
     ).encode("utf-8")
 
