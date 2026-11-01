@@ -83,7 +83,7 @@ export function MessageBubble({ message, onViewSources }: MessageBubbleProps) {
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
               <span className="font-bold text-ink-primaryLight dark:text-ink-primaryDark uppercase tracking-wider">
-                CLAIMEYE // SYNTHESIS
+                KORTEX AI // SYNTHESIS
               </span>
               <span>•</span>
               <span>{timeStr}</span>
