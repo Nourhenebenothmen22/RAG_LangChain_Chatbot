@@ -17,7 +17,7 @@ def test_config_loading():
     """Verify settings defaults and environment mapping."""
     settings = get_settings()
     assert isinstance(settings, Settings)
-    assert settings.collection_name in ("rag_documents", "claimeye_documents")
+    assert settings.collection_name in ("rag_documents", "claimeye_documents", "kortex_documents")
     assert settings.chunk_size == 1000
     assert settings.chunk_overlap == 200
     assert settings.dense_top_k == 10
