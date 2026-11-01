@@ -10,10 +10,9 @@ Provides:
 - Contextual breadcrumb prefixing for enriched dense and BM25 retrieval
 """
 
-import hashlib
 import logging
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from langchain_core.documents import Document

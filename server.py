@@ -3,8 +3,6 @@
 import argparse
 import uvicorn
 
-from rag_langchain_chatbot.api import app
-
 
 def run_server() -> None:
     parser = argparse.ArgumentParser(description="Start Hybrid RAG API server.")
