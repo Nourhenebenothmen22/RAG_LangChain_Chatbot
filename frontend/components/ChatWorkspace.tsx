@@ -343,7 +343,7 @@ export function ChatWorkspace() {
             /* Swiss Editorial Welcome Section */
             <div className="py-6 sm:py-12 animate-fade-in">
               {/* Technical Issue Tag */}
-              <div className="flex items-center justify-between border-b border-border-light dark:border-border-dark pb-3 mb-6 text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
+              <div className="flex items-center justify-between border-b border-border-light dark:border-border-dark pb-3 mb-6 text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
                 <span>SYSTEM EDITION 02.4 // KORTEX HYBRID RAG</span>
                 <span>CHROMA + BM25 + CROSS-ENCODER</span>
               </div>
@@ -367,7 +367,7 @@ export function ChatWorkspace() {
 
               {/* Numbered Query Section Grid */}
               <div className="mt-8">
-                <div className="flex items-center justify-between text-[11px] font-mono tracking-widest text-ink-mutedLight dark:text-ink-mutedDark uppercase border-b border-border-light dark:border-border-dark pb-2 mb-4">
+                <div className="flex items-center justify-between text-xs font-mono font-semibold tracking-widest text-ink-mutedLight dark:text-ink-mutedDark uppercase border-b border-border-light dark:border-border-dark pb-2 mb-4">
                   <span>01 // RECOMMENDED INQUIRIES</span>
                   <span>SELECT DOSSIER PROMPT</span>
                 </div>
@@ -377,10 +377,10 @@ export function ChatWorkspace() {
                     <button
                       key={sq.num}
                       onClick={() => handleSendMessage(sq.query, { topK: 3, rerank: true })}
-                      className="border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 text-left hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark transition-colors group flex flex-col justify-between shadow-subtle"
+                      className="border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark p-4 text-left hover:border-cobalt-DEFAULT dark:hover:border-cobalt-dark focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors group flex flex-col justify-between shadow-subtle"
                     >
                       <div>
-                        <div className="flex items-center justify-between text-[10px] font-mono mb-2">
+                        <div className="flex items-center justify-between text-xs font-mono mb-2">
                           <span className="text-cobalt-DEFAULT dark:text-cobalt-dark font-bold">
                             [{sq.num}] {sq.category}
                           </span>
@@ -396,7 +396,7 @@ export function ChatWorkspace() {
                         </p>
                       </div>
 
-                      <div className="mt-3 pt-2.5 border-t border-border-light dark:border-border-dark text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark truncate">
+                      <div className="mt-3 pt-2.5 border-t border-border-light dark:border-border-dark text-xs font-mono text-ink-mutedLight dark:text-ink-mutedDark truncate">
                         "{sq.query}"
                       </div>
                     </button>
@@ -405,7 +405,7 @@ export function ChatWorkspace() {
               </div>
 
               {/* Architecture Guarantee Footer */}
-              <div className="mt-10 p-4 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark flex flex-wrap items-center justify-between gap-3 text-[11px] font-mono text-ink-secondaryLight dark:text-ink-secondaryDark">
+              <div className="mt-10 p-4 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-ink-secondaryLight dark:text-ink-secondaryDark">
                 <div className="flex items-center space-x-2">
                   <Scale className="w-4 h-4 text-cobalt-DEFAULT dark:text-cobalt-dark" />
                   <span className="font-semibold text-ink-primaryLight dark:text-ink-primaryDark">
