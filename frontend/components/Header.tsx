@@ -30,7 +30,7 @@ export function Header({
 
         <div className="flex items-center space-x-2.5">
           <span className="font-extrabold text-sm tracking-tight text-ink-primaryLight dark:text-ink-primaryDark font-mono uppercase">
-            ClaimEye
+            Kortex AI
           </span>
           <span className="hidden sm:inline-block text-[10px] font-mono text-ink-mutedLight dark:text-ink-mutedDark tracking-wider border-l border-border-light dark:border-border-dark pl-2.5">
             SYS.VER 02.4 // ENTERPRISE
