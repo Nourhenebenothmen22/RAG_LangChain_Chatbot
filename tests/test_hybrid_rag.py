@@ -1,6 +1,5 @@
 """Comprehensive test suite for the Hybrid RAG pipeline."""
 
-import shutil
 from pathlib import Path
 
 import pytest
@@ -11,7 +10,7 @@ from rag_langchain_chatbot.config import Settings, get_settings
 from rag_langchain_chatbot.index import generate_deterministic_chunk_id
 from rag_langchain_chatbot.pipeline import HybridRAGPipeline
 from rag_langchain_chatbot.reranker import CrossEncoderReranker
-from rag_langchain_chatbot.retrieve import HybridRetriever, reciprocal_rank_fusion
+from rag_langchain_chatbot.retrieve import reciprocal_rank_fusion
 
 
 def test_config_loading():
