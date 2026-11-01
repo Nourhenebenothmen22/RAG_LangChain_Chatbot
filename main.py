@@ -1,7 +1,6 @@
 """Main CLI entrypoint for the Hybrid RAG pipeline."""
 
 import argparse
-import sys
 from typing import Optional
 
 from rag_langchain_chatbot.config import get_settings
