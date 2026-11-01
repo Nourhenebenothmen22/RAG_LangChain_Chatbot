@@ -3,7 +3,6 @@
 import datetime
 import logging
 import sqlite3
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from rag_langchain_chatbot.config import Settings, get_settings

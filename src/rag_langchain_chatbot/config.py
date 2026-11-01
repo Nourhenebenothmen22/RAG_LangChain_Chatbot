@@ -45,8 +45,8 @@ class Settings(BaseSettings):
         description="Persistence directory for Chroma vector store"
     )
     bm25_index_path: Path = Field(
-        default=PROJECT_ROOT / "chroma_db" / "bm25_index.pkl",
-        description="Path to serialized BM25 index and corpus"
+        default=PROJECT_ROOT / "chroma_db" / "bm25_index.json",
+        description="Path to serialized BM25 index and corpus (safe JSON format)"
     )
     metrics_db_path: Path = Field(
         default=PROJECT_ROOT / "chroma_db" / "metrics.sqlite3",
@@ -70,15 +70,35 @@ class Settings(BaseSettings):
     )
     chunk_size: int = Field(
         default=1000,
-        description="Maximum character length per chunk"
+        description="Maximum character length per chunk (used for fallback character splitting)"
     )
     chunk_overlap: int = Field(
         default=200,
         description="Character overlap between consecutive chunks"
     )
+    chunk_target_tokens: int = Field(
+        default=250,
+        description="Target token count for structure-aware semantic chunking"
+    )
+    chunk_min_tokens: int = Field(
+        default=40,
+        description="Minimum token threshold to prevent orphan sentence fragments"
+    )
+    chunk_max_tokens: int = Field(
+        default=384,
+        description="Hard maximum token limit per chunk to avoid dense embedding truncation"
+    )
+    chunk_overlap_sentences: int = Field(
+        default=1,
+        description="Number of context sentences overlapped across consecutive chunks"
+    )
+    enable_context_breadcrumbs: bool = Field(
+        default=True,
+        description="Whether to prepend document and section hierarchy breadcrumbs to chunks"
+    )
     chunk_separators: List[str] = Field(
-        default_factory=lambda: ["\n\n", "\n", " ", ""],
-        description="Separators used by recursive character text splitter"
+        default_factory=lambda: [". ", "! ", "? ", "؟ ", "، ", ";\n", "\n## ", "\n# ", "\n\n", "\n|", "\n", " ", ""],
+        description="Separators used by recursive character text splitter with sentence and heading preservation"
     )
 
     # --------------------------------------------------
@@ -87,6 +107,10 @@ class Settings(BaseSettings):
     embedding_model_name: str = Field(
         default="sentence-transformers/paraphrase-multilingual-mpnet-base-v2",
         description="Local HuggingFace embedding model name"
+    )
+    embedding_max_seq_length: int = Field(
+        default=512,
+        description="Maximum token sequence length configured on the embedding model client"
     )
     embedding_device: str = Field(
         default="cpu",
@@ -128,13 +152,21 @@ class Settings(BaseSettings):
         default=10,
         description="Number of fused candidate chunks sent to reranker"
     )
+    enable_adaptive_rrf: bool = Field(
+        default=True,
+        description="Enable dynamic query-adaptive channel weighting for Reciprocal Rank Fusion"
+    )
+    enable_context_compression: bool = Field(
+        default=True,
+        description="Enable semantic context deduplication and compression across overlapping chunks"
+    )
 
     # --------------------------------------------------
-    # Cross-Encoder Reranker (Local)
+    # Cross-Encoder Reranker (Local & Multilingual)
     # --------------------------------------------------
     reranker_model_name: str = Field(
-        default="cross-encoder/ms-marco-TinyBERT-L-2-v2",
-        description="Local Cross-Encoder model name for reranking"
+        default="BAAI/bge-reranker-v2-m3",
+        description="Local Cross-Encoder model name for multilingual reranking (French, English, Arabic, Tunisian)"
     )
     reranker_device: str = Field(
         default="cpu",
@@ -151,6 +183,14 @@ class Settings(BaseSettings):
     min_relevance_score: Optional[float] = Field(
         default=None,
         description="Optional minimum cross-encoder relevance score threshold"
+    )
+
+    # --------------------------------------------------
+    # Conversational Query Rewriting
+    # --------------------------------------------------
+    enable_query_rewriting: bool = Field(
+        default=True,
+        description="Enable conversational query condensation for follow-up questions"
     )
 
     # --------------------------------------------------

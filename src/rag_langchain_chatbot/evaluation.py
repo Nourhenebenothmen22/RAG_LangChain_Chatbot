@@ -3,10 +3,10 @@
 import json
 import logging
 import re
-from dataclasses import asdict, dataclass
-from pathlib import Path
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
+from rag_langchain_chatbot.bm25 import normalize_diacritics
 from rag_langchain_chatbot.config import Settings, get_settings
 from rag_langchain_chatbot.monitoring import get_metrics_tracker
 
@@ -60,6 +60,13 @@ BENCHMARK_DATASET: List[EvaluationSample] = [
         reference_keywords=["yolo", "onnx", "boîtes", "sévérité"],
         expected_clause="BF-03 / T205"
     ),
+    EvaluationSample(
+        id="eval-06",
+        question="What is the quantum encryption protocol used by ClaimEye satellites?",
+        ground_truth="Information not found in the indexed database and documents. Please verify the query or ingest the relevant sources.",
+        reference_keywords=["not found", "information", "documents"],
+        expected_clause="N/A (Unhallucinated Out-of-Domain Control)"
+    ),
 ]
 
 
@@ -74,17 +81,18 @@ def compute_faithfulness(answer: str, context: str) -> float:
         return 1.0
 
     supported_count = 0
-    context_lower = context.lower()
-    context_words = set(re.findall(r"\w+", context_lower))
+    context_norm = normalize_diacritics(context.lower())
+    context_words = set(re.findall(r"\w+", context_norm))
 
     for sentence in sentences:
-        tokens = [t for t in re.findall(r"\w+", sentence.lower()) if len(t) >= 3]
+        sent_norm = normalize_diacritics(sentence.lower())
+        tokens = [t for t in re.findall(r"\w+", sent_norm) if len(t) >= 3]
         if not tokens:
             continue
 
         overlap = sum(
             1 for t in tokens
-            if t in context_lower or any(c.startswith(t[:4]) or t.startswith(c[:4]) for c in context_words if len(c) >= 3)
+            if t in context_norm or any(c.startswith(t[:4]) or t.startswith(c[:4]) for c in context_words if len(c) >= 3)
         )
         overlap_ratio = overlap / len(tokens)
         if overlap_ratio >= 0.35:
@@ -98,8 +106,11 @@ def compute_answer_relevance(answer: str, ground_truth: str, reference_keywords:
     if not answer:
         return 0.0
 
-    answer_lower = answer.lower()
-    matched_keywords = sum(1 for kw in reference_keywords if kw.lower() in answer_lower)
+    answer_norm = normalize_diacritics(re.sub(r"(\d+),(\d+)", r"\1.\2", answer.lower()))
+    matched_keywords = sum(
+        1 for kw in reference_keywords
+        if normalize_diacritics(re.sub(r"(\d+),(\d+)", r"\1.\2", kw.lower())) in answer_norm
+    )
     relevance_score = matched_keywords / max(1, len(reference_keywords))
     return round(min(1.0, relevance_score), 4)
 
@@ -109,11 +120,11 @@ def compute_context_precision(retrieved_context: str, reference_keywords: List[s
     if not retrieved_context:
         return 0.0
 
-    context_norm = re.sub(r"(\d+),(\d+)", r"\1.\2", retrieved_context.lower())
+    context_norm = normalize_diacritics(re.sub(r"(\d+),(\d+)", r"\1.\2", retrieved_context.lower()))
     matched = 0
     for kw in reference_keywords:
-        kw_norm = re.sub(r"(\d+),(\d+)", r"\1.\2", kw.lower())
-        if kw_norm in context_norm or kw.lower() in retrieved_context.lower():
+        kw_norm = normalize_diacritics(re.sub(r"(\d+),(\d+)", r"\1.\2", kw.lower()))
+        if kw_norm in context_norm:
             matched += 1
 
     return round(matched / max(1, len(reference_keywords)), 4)
@@ -126,8 +137,56 @@ class RAGEvaluator:
         self.settings = settings or get_settings()
         self.metrics_tracker = get_metrics_tracker(self.settings)
 
+    def evaluate_with_llm_judge(
+        self,
+        question: str,
+        answer: str,
+        context: str,
+        ground_truth: str,
+        llm: Optional[Any] = None,
+    ) -> Optional[Dict[str, float]]:
+        """Perform semantic LLM-as-a-Judge evaluation of faithfulness, relevance, and precision."""
+        judge_llm = llm or getattr(self.settings, "llm", None)
+        if judge_llm is None or not hasattr(judge_llm, "invoke"):
+            return None
+
+        prompt = (
+            "You are an expert AI evaluator assessing RAG performance.\n"
+            f"Question: {question}\n"
+            f"Ground Truth Reference: {ground_truth}\n"
+            f"Retrieved Context: {context[:2000]}\n"
+            f"Generated Answer: {answer}\n\n"
+            "Evaluate the answer across three metrics from 0.0 to 1.0:\n"
+            "1. Faithfulness: Is the answer strictly supported by the retrieved context without hallucinations?\n"
+            "2. Answer Relevance: Does the answer directly address the question?\n"
+            "3. Context Precision: Does the retrieved context contain the facts needed?\n\n"
+            "Respond in JSON format:\n"
+            '{"faithfulness": float, "answer_relevance": float, "context_precision": float}'
+        )
+        try:
+            res = judge_llm.invoke(prompt)
+            content = getattr(res, "content", str(res))
+            m = re.search(r"\{.*?\}", content, re.DOTALL)
+            if m:
+                data = json.loads(m.group(0))
+                return {
+                    "faithfulness": float(data.get("faithfulness", 0.0)),
+                    "answer_relevance": float(data.get("answer_relevance", 0.0)),
+                    "context_precision": float(data.get("context_precision", 0.0)),
+                }
+        except Exception as e:
+            logger.debug("LLM-as-a-judge evaluation failed (%s). Falling back to heuristic metrics.", e)
+        return None
+
     def sync_dataset_to_langsmith(self) -> Optional[str]:
         """Create or update benchmark dataset in LangSmith Cloud."""
+        try:
+            import socket
+            with socket.create_connection(("api.smith.langchain.com", 443), timeout=1.0):
+                pass
+        except Exception:
+            return None
+
         try:
             from langsmith import Client
             client = Client()
@@ -172,23 +231,32 @@ class RAGEvaluator:
         # Try initializing LangSmith client for feedback logging
         ls_client = None
         ls_project_id = None
+        is_online = False
         try:
-            from langsmith import Client
-            c = Client()
-            if c.api_key:
-                ls_client = c
-                target_project = getattr(self.settings, "langchain_project", None) or getattr(self.settings, "langsmith_project", "hybrid-rag")
-                try:
-                    proj = c.read_project(project_name=target_project)
-                    ls_project_id = str(proj.id)
-                except Exception:
+            import socket
+            with socket.create_connection(("api.smith.langchain.com", 443), timeout=1.0):
+                is_online = True
+        except Exception:
+            is_online = False
+
+        if is_online:
+            try:
+                from langsmith import Client
+                c = Client()
+                if c.api_key:
+                    ls_client = c
+                    target_project = getattr(self.settings, "langchain_project", None) or getattr(self.settings, "langsmith_project", "hybrid-rag")
                     try:
-                        proj = c.create_project(project_name=target_project)
+                        proj = c.read_project(project_name=target_project)
                         ls_project_id = str(proj.id)
                     except Exception:
-                        ls_project_id = None
-        except Exception:
-            pass
+                        try:
+                            proj = c.create_project(project_name=target_project)
+                            ls_project_id = str(proj.id)
+                        except Exception:
+                            ls_project_id = None
+            except Exception:
+                pass
 
         results: List[Dict[str, Any]] = []
 
@@ -202,9 +270,23 @@ class RAGEvaluator:
             context = response.format_context()
             answer = response.answer if hasattr(response, "answer") else context
 
-            faithfulness = compute_faithfulness(answer, context)
-            relevance = compute_answer_relevance(answer, sample.ground_truth, sample.reference_keywords)
-            precision = compute_context_precision(context, sample.reference_keywords)
+            llm_eval = self.evaluate_with_llm_judge(
+                question=sample.question,
+                answer=answer,
+                context=context,
+                ground_truth=sample.ground_truth,
+                llm=getattr(pipeline, "llm", None)
+            )
+
+            if llm_eval:
+                faithfulness = llm_eval["faithfulness"]
+                relevance = llm_eval["answer_relevance"]
+                precision = llm_eval["context_precision"]
+            else:
+                faithfulness = compute_faithfulness(answer, context)
+                relevance = compute_answer_relevance(answer, sample.ground_truth, sample.reference_keywords)
+                precision = compute_context_precision(context, sample.reference_keywords)
+
             overall = round((faithfulness + relevance + precision) / 3.0, 4)
 
             total_faithfulness += faithfulness
@@ -237,7 +319,12 @@ class RAGEvaluator:
             # Send evaluation feedback to LangSmith Cloud run if run ID exists
             if ls_client and response.langsmith_run_id:
                 try:
-                    fb_kwargs: Dict[str, Any] = {"session_id": ls_project_id} if ls_project_id else {}
+                    fb_kwargs: Dict[str, Any] = {}
+                    if ls_project_id:
+                        fb_kwargs["session_id"] = ls_project_id
+                    elif getattr(self.settings, "langchain_project", None):
+                        fb_kwargs["session_name"] = self.settings.langchain_project
+
                     ls_client.create_feedback(
                         run_id=response.langsmith_run_id,
                         key="faithfulness",
