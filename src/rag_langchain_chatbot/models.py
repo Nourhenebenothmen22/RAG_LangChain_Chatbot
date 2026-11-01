@@ -208,13 +208,13 @@ class LocalContextSynthesizer(BaseChatModel):
             is_french = any(w in full_prompt.lower() for w in ["bonjour", "salut", "merci", "revoir", "comment", "journée", "journee"])
 
             if has_arabic:
-                content = "أهلاً ومرحباً بك! أنا مساعد ClaimEye الذكي، يسعدني دائماً مساعدتك في كل ما يخص ملفات التأمين، وتقدير أضرار الحوادث، وبنود العقود."
+                content = "أهلاً ومرحباً بك! أنا مساعد Kortex AI الذكي، يسعدني دائماً مساعدتك في البحث في المستندات، وتحليل البيانات، وبنود العقود والسياسات."
             elif is_arabizi:
-                content = "Ahla bik w marhba! Ena l-assistant ClaimEye AI. Dima fel khedma ken theb souel 3al dossiers mte3ek, chiffrage wala les franchises."
+                content = "Ahla bik w marhba! Ena l-assistant Kortex AI. Dima fel khedma ken theb souel 3al les documents mte3ek wala ay ma3louma."
             elif is_french:
-                content = "Bonjour ! Je suis l'assistant ClaimEye AI. Je suis à votre entière disposition pour vous accompagner dans vos dossiers d'assurance, le chiffrage des dommages et l'analyse de vos contrats."
+                content = "Bonjour ! Je suis l'assistant Kortex AI. Je suis à votre entière disposition pour vous accompagner dans l'analyse de vos documents et répondre à vos questions."
             else:
-                content = "Hello! I am ClaimEye AI, your assistant for insurance claims, damage assessment, and policy workflows. How can I assist you today?"
+                content = "Hello! I am Kortex AI, your enterprise document intelligence and hybrid retrieval assistant. How can I assist you today?"
 
             prompt_tokens = max(1, len(full_prompt) // 4)
             completion_tokens = max(1, len(content) // 4)
@@ -348,7 +348,7 @@ class LocalContextSynthesizer(BaseChatModel):
             domain_terms = [
                 "franchise", "sinistre", "constat", "fraude", "fraud", "score", "seuil", "threshold",
                 "devis", "chiffrage", "expert", "remboursement", "reimbursement", "garantie", "contrat",
-                "policy", "tarification", "pricing", "t301", "t310", "t401", "bf-0", "us-1", "claimeye",
+                "policy", "tarification", "pricing", "t301", "t310", "t401", "bf-0", "us-1", "claimeye", "kortex",
                 "degat", "dommage", "damage", "collision", "deductible", "couverture", "workflow",
                 "الفرانشيز", "التأمين", "تامين", "احتيال", "تعويض", "معاينة", "كرهبة"
             ]
