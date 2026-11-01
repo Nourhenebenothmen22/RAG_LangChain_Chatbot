@@ -1,8 +1,6 @@
 """Tests for security guardrails, prompt injection detection, and context boundaries."""
 
-import pytest
-
-from rag_langchain_chatbot.security import SecurityGuard, get_security_guard
+from rag_langchain_chatbot.security import SecurityGuard
 
 
 def test_input_validation_benign():

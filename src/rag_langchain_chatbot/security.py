@@ -14,8 +14,9 @@ from typing import List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
-# Known prompt injection, jailbreak, and instruction override signatures
+# Known prompt injection, jailbreak, and instruction override signatures (Multilingual EN/FR)
 INJECTION_PATTERNS = [
+    # English injection patterns
     r"ignore\s+(?:all\s+)?(?:previous|prior|above)\s+instructions?",
     r"disregard\s+(?:all\s+)?(?:previous|prior|above)\s+instructions?",
     r"forget\s+(?:all\s+)?(?:previous|prior|above)\s+instructions?",
@@ -25,9 +26,18 @@ INJECTION_PATTERNS = [
     r"print\s+(?:the\s+)?(?:system\s+prompt|initial\s+prompt)",
     r"reveal\s+(?:the\s+)?(?:system\s+prompt|hidden\s+instructions?)",
     r"what\s+(?:is|are)\s+your\s+(?:system\s+prompt|core\s+instructions?)",
+    # French injection patterns
+    r"ignore[zr]?\s+(?:toutes\s+)?(?:les\s+)?(?:instructions?|directives?)\s*(?:pr[eé]c[eé]dentes?|ant[eé]rieures?|ci-dessus)?",
+    r"oubli(?:e|er|ez)\s+(?:toutes\s+)?(?:les\s+)?(?:instructions?|directives?)",
+    r"mode\s+(?:d[eé]veloppeur|sans\s+filtre|unrestricted|dan)",
+    r"affiche[zr]?\s+(?:le\s+)?(?:system\s*prompt|prompt\s*syst[eè]me|instructions?\s*cach[eé]es?)",
+    r"r[eé]v[eè]le[zr]?\s+(?:le\s+)?(?:system\s*prompt|prompt\s*syst[eè]me|directives?)",
+    r"contourne[zr]?\s+(?:les\s+)?(?:r[eè]gles|filtres)\s+de\s+s[eé]curit[eé]",
+    # Delimiter breakout and structural tags
     r"<\s*system\s*>",
     r"\[\s*INST\s*\]",
     r"```system",
+    r"<\s*/?retrieved_context\s*>",
 ]
 
 INJECTION_REGEX = re.compile("|".join(INJECTION_PATTERNS), re.IGNORECASE)
@@ -75,8 +85,8 @@ class SecurityGuard:
             trimmed = trimmed[:self.max_query_length]
             flagged.append("exceeded_max_length")
 
-        # Strip null bytes and non-printable control characters
-        sanitized = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]", "", trimmed)
+        # Strip null bytes, zero-width characters, and non-printable control characters
+        sanitized = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f\u200b-\u200d\ufeff]", "", trimmed)
 
         # Check prompt injection patterns if enabled
         risk_level = "LOW"
