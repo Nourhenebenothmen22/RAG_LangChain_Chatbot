@@ -12,12 +12,13 @@ import csv
 import hashlib
 import json
 import logging
+import re
 import sqlite3
 import zipfile
 import xml.etree.ElementTree as ET
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 from langchain_core.documents import Document
 
@@ -47,8 +48,23 @@ class BaseDocumentLoader(ABC):
         pass
 
 
+def _clean_page_text(raw_text: str) -> str:
+    """Clean and normalize extracted page text, removing page numbers and line break artifacts."""
+    if not raw_text:
+        return ""
+    # Normalize non-breaking spaces and carriage returns
+    text = raw_text.replace("\xa0", " ").replace("\r", "")
+    # Fix soft hyphenation across line breaks (e.g. "responsi-\nbilité" -> "responsibilité")
+    text = re.sub(r'(\b\w+)-\n(\w+\b)', r'\1\2', text)
+    # Remove solitary page number headers/footers (e.g. "Page 1 / 10", "Page 2", "1 / 5")
+    text = re.sub(r'^\s*(?:Page\s+)?\d+(?:\s*(?:/|sur|of|-)\s*\d+)?\s*$', '', text, flags=re.MULTILINE | re.IGNORECASE)
+    # Collapse multiple blank lines
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    return text.strip()
+
+
 class PDFLoader(BaseDocumentLoader):
-    """Loads PDF files using PyPDFLoader with metadata extraction."""
+    """Loads PDF files using PyPDFLoader with layout cleaning and metadata extraction."""
 
     def load(self, source: Union[str, Path]) -> List[Document]:
         file_path = Path(source)
@@ -63,6 +79,7 @@ class PDFLoader(BaseDocumentLoader):
         stat = file_path.stat()
 
         for doc in docs:
+            doc.page_content = _clean_page_text(doc.page_content)
             doc.metadata["source"] = str(file_path.resolve())
             doc.metadata["file_name"] = file_path.name
             doc.metadata["file_type"] = "pdf"
@@ -78,7 +95,8 @@ class PDFLoader(BaseDocumentLoader):
 class DocxLoader(BaseDocumentLoader):
     """Loads DOCX documents by parsing document.xml inside the zip package.
     
-    Extracts text paragraphs and table cells without requiring heavy third-party dependencies.
+    Extracts structured headings, paragraphs, and tables formatted as clean Markdown
+    without requiring external C-dependencies.
     """
 
     def load(self, source: Union[str, Path]) -> List[Document]:
@@ -94,16 +112,63 @@ class DocxLoader(BaseDocumentLoader):
                 xml_content = docx_zip.read("word/document.xml")
             
             tree = ET.fromstring(xml_content)
-            # Standard WordprocessingML namespace
             ns = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
             
-            paragraphs = []
-            for p_elem in tree.findall(".//w:p", ns):
-                texts = [t_elem.text for t_elem in p_elem.findall(".//w:t", ns) if t_elem.text]
-                if texts:
-                    paragraphs.append("".join(texts))
+            body = tree.find(".//w:body", ns)
+            elements = list(body) if body is not None else tree.findall(".//w:p", ns)
 
-            full_text = "\n\n".join(paragraphs).strip()
+            blocks: List[str] = []
+            for elem in elements:
+                tag = elem.tag.split("}")[-1] if "}" in elem.tag else elem.tag
+                if tag == "p":
+                    p_pr = elem.find("w:pPr", ns)
+                    style_val = ""
+                    if p_pr is not None:
+                        p_style = p_pr.find("w:pStyle", ns)
+                        if p_style is not None:
+                            style_val = p_style.attrib.get(f"{{{ns['w']}}}val", "") or p_style.attrib.get("val", "")
+
+                    texts = [t.text for t in elem.findall(".//w:t", ns) if t.text]
+                    p_text = "".join(texts).strip()
+                    if p_text:
+                        p_text = re.sub(r'[\r\t\xa0]+', ' ', p_text)
+                        lower_style = style_val.lower()
+                        if "heading1" in lower_style or "titre1" in lower_style or lower_style == "title":
+                            p_text = f"# {p_text}"
+                        elif "heading2" in lower_style or "titre2" in lower_style:
+                            p_text = f"## {p_text}"
+                        elif "heading3" in lower_style or "titre3" in lower_style:
+                            p_text = f"### {p_text}"
+                        blocks.append(p_text)
+
+                elif tag == "tbl":
+                    table_rows: List[List[str]] = []
+                    for tr in elem.findall(".//w:tr", ns):
+                        cells: List[str] = []
+                        for tc in tr.findall(".//w:tc", ns):
+                            cell_texts = [t.text for t in tc.findall(".//w:t", ns) if t.text]
+                            cleaned_cell = " ".join("".join(cell_texts).split()).replace("|", "\\|")
+                            cells.append(cleaned_cell)
+                        if any(cells):
+                            table_rows.append(cells)
+
+                    if table_rows:
+                        max_cols = max(len(r) for r in table_rows)
+                        norm_rows = [r + [""] * (max_cols - len(r)) for r in table_rows]
+                        header = "| " + " | ".join(norm_rows[0]) + " |"
+                        sep = "| " + " | ".join(["---"] * max_cols) + " |"
+                        body_rows = ["| " + " | ".join(r) + " |" for r in norm_rows[1:]]
+                        tbl_md = "\n".join([header, sep] + body_rows)
+                        blocks.append(tbl_md)
+
+            # Fallback if body iteration was empty
+            if not blocks:
+                for p_elem in tree.findall(".//w:p", ns):
+                    texts = [t.text for t in p_elem.findall(".//w:t", ns) if t.text]
+                    if texts:
+                        blocks.append("".join(texts).strip())
+
+            full_text = "\n\n".join(blocks).strip()
             if not full_text:
                 full_text = f"[Empty DOCX document: {file_path.name}]"
 
@@ -191,8 +256,12 @@ class StructuredDatabaseLoader(BaseDocumentLoader):
                 tables = sorted(list(valid_tables))
 
             for tbl in tables:
-                # Table name is verified against sqlite_master and safely quoted
-                safe_tbl = f'"{tbl.replace(chr(34), chr(34) + chr(34))}"'
+                # Enforce strict identifier whitelist against SQL injection
+                if not re.match(r"^[a-zA-Z0-9_]+$", tbl) or tbl not in valid_tables:
+                    logger.warning("Rejected unsafe table name during ingestion: %s", tbl)
+                    continue
+
+                safe_tbl = f'"{tbl}"'
                 cursor.execute(f"PRAGMA table_info({safe_tbl});")
                 all_columns = [c["name"] for c in cursor.fetchall()]
                 columns = [c for c in all_columns if not self.text_columns or c in self.text_columns] or all_columns

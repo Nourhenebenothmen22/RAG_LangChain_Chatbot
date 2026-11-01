@@ -3,20 +3,13 @@
 import json
 import sqlite3
 import zipfile
-import xml.etree.ElementTree as ET
 from pathlib import Path
-
-import pytest
-from langchain_core.documents import Document
 
 from rag_langchain_chatbot.loaders import (
     DocxLoader,
-    LoaderRegistry,
-    PDFLoader,
     StructuredDatabaseLoader,
     TabularFileLoader,
     TextLoader,
-    compute_file_sha256,
     get_loader_registry,
 )
 
