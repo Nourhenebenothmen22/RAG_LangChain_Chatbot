@@ -73,7 +73,7 @@ export function ChatWorkspace() {
   // Initialize and load saved sessions from localStorage
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("claimeye-chat-sessions");
+      const saved = localStorage.getItem("kortex-chat-sessions") || localStorage.getItem("claimeye-chat-sessions");
       if (saved) {
         const parsed: ConversationSession[] = JSON.parse(saved);
         setSessions(parsed);
@@ -111,7 +111,7 @@ export function ChatWorkspace() {
         return s;
       });
       try {
-        localStorage.setItem("claimeye-chat-sessions", JSON.stringify(updated));
+        localStorage.setItem("kortex-chat-sessions", JSON.stringify(updated));
       } catch (_) {}
       return updated;
     });
@@ -151,7 +151,7 @@ export function ChatWorkspace() {
     const remaining = sessions.filter((s) => s.id !== id);
     setSessions(remaining);
     try {
-      localStorage.setItem("claimeye-chat-sessions", JSON.stringify(remaining));
+      localStorage.setItem("kortex-chat-sessions", JSON.stringify(remaining));
     } catch (_) {}
 
     if (activeSessionId === id) {
@@ -344,7 +344,7 @@ export function ChatWorkspace() {
             <div className="py-6 sm:py-12 animate-fade-in">
               {/* Technical Issue Tag */}
               <div className="flex items-center justify-between border-b border-border-light dark:border-border-dark pb-3 mb-6 text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
-                <span>SYSTEM EDITION 02.4 // DOSSIER AUTOMATION</span>
+                <span>SYSTEM EDITION 02.4 // KORTEX HYBRID RAG</span>
                 <span>CHROMA + BM25 + CROSS-ENCODER</span>
               </div>
 
@@ -352,7 +352,7 @@ export function ChatWorkspace() {
               <div className="mb-8">
                 <div className="flex items-baseline space-x-3 mb-2">
                   <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tighter uppercase text-ink-primaryLight dark:text-ink-primaryDark font-mono">
-                    CLAIMEYE
+                    KORTEX
                   </h1>
                   <span className="text-cobalt-DEFAULT dark:text-cobalt-dark font-mono text-xl sm:text-2xl font-bold">
                     [AI]
@@ -360,8 +360,8 @@ export function ChatWorkspace() {
                 </div>
 
                 <p className="text-base sm:text-lg text-ink-secondaryLight dark:text-ink-secondaryDark max-w-2xl leading-relaxed">
-                  Autonomous insurance intelligence and forensic claims verification engine.
-                  Formulate inquiries across policy clauses, verify deductibles, benchmark fraud thresholds, and inspect grounded citations.
+                  Autonomous multilingual document intelligence and hybrid retrieval-augmented generation engine.
+                  Formulate inquiries across policies, contracts, specifications, and verify grounded source citations.
                 </p>
               </div>
 
