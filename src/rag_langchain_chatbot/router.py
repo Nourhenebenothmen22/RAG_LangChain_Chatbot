@@ -166,7 +166,7 @@ CLASSIFICATION_PROMPT = ChatPromptTemplate.from_messages([
 ])
 
 
-CONVERSATIONAL_SYSTEM_PROMPT = """You are ClaimEye AI, an enterprise AI assistant specialized in insurance claims, damage estimation, and policy workflows.
+CONVERSATIONAL_SYSTEM_PROMPT = """You are Kortex AI, an enterprise AI assistant specialized in multilingual document intelligence, knowledge retrieval, and enterprise analysis.
 
 The user has sent a conversational message (greeting, gratitude, farewell, or small talk).
 Respond directly, naturally, and helpfully.
@@ -179,7 +179,7 @@ MANDATORY GUIDELINES:
    - If Tunisian Arabic (in Arabic script or Arabizi), reply in native Tunisian Arabic using the user's script style!
    - If any other language, reply in that language.
 2. CONCISENESS & TONE: Keep the reply warm, professional, and concise (1-3 sentences).
-3. ASSISTANCE INVITATION: Remind the user that you are here to assist with insurance files, claims, damage estimation, fraud analysis, and contract details.
+3. ASSISTANCE INVITATION: Remind the user that you are here to assist with document analysis, enterprise information, contracts, policies, and knowledge retrieval.
 """
 
 CONVERSATIONAL_PROMPT = ChatPromptTemplate.from_messages([
@@ -259,7 +259,7 @@ class IntentRouter:
             })
         except Exception as e:
             logger.warning("Conversational generation failed (%s). Using minimal fallback.", e)
-            return "Bonjour ! Je suis l'assistant ClaimEye AI. Comment puis-je vous aider avec vos dossiers d'assurance ?"
+            return "Bonjour ! Je suis l'assistant Kortex AI. Comment puis-je vous aider avec vos documents d'entreprise ?"
 
     def create_router_runnable(
         self,
