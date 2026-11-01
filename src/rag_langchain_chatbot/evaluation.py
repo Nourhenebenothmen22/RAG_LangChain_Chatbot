@@ -23,7 +23,7 @@ class EvaluationSample:
     expected_clause: str
 
 
-# Standard benchmark test cases derived from the ClaimEye specification
+# Standard benchmark test cases derived from the Kortex AI specification
 BENCHMARK_DATASET: List[EvaluationSample] = [
     EvaluationSample(
         id="eval-01",
@@ -62,7 +62,7 @@ BENCHMARK_DATASET: List[EvaluationSample] = [
     ),
     EvaluationSample(
         id="eval-06",
-        question="What is the quantum encryption protocol used by ClaimEye satellites?",
+        question="What is the quantum encryption protocol used by Kortex AI satellites?",
         ground_truth="Information not found in the indexed database and documents. Please verify the query or ingest the relevant sources.",
         reference_keywords=["not found", "information", "documents"],
         expected_clause="N/A (Unhallucinated Out-of-Domain Control)"
@@ -194,14 +194,14 @@ class RAGEvaluator:
                 logger.info("LangSmith API key not configured; skipping cloud dataset sync.")
                 return None
 
-            dataset_name = "claimeye-rag-benchmark"
+            dataset_name = "kortex-rag-benchmark"
             try:
                 dataset = client.read_dataset(dataset_name=dataset_name)
                 logger.info("Found existing LangSmith dataset: %s (id: %s)", dataset_name, dataset.id)
             except Exception:
                 dataset = client.create_dataset(
                     dataset_name=dataset_name,
-                    description="Benchmark evaluation dataset for ClaimEye AI contract specifications"
+                    description="Benchmark evaluation dataset for Kortex AI contract specifications"
                 )
                 logger.info("Created new LangSmith dataset: %s (id: %s)", dataset_name, dataset.id)
 
@@ -308,7 +308,7 @@ class RAGEvaluator:
 
             # Log to local metrics database
             self.metrics_tracker.log_evaluation(
-                dataset_name="claimeye-benchmark-v1",
+                dataset_name="kortex-benchmark-v1",
                 question=sample.question,
                 faithfulness=faithfulness,
                 relevance=relevance,
@@ -329,21 +329,21 @@ class RAGEvaluator:
                         run_id=response.langsmith_run_id,
                         key="faithfulness",
                         score=faithfulness,
-                        comment="Automated ClaimEye Faithfulness evaluator",
+                        comment="Automated Kortex AI Faithfulness evaluator",
                         **fb_kwargs
                     )
                     ls_client.create_feedback(
                         run_id=response.langsmith_run_id,
                         key="answer_relevance",
                         score=relevance,
-                        comment="Automated ClaimEye Answer Relevance evaluator",
+                        comment="Automated Kortex AI Answer Relevance evaluator",
                         **fb_kwargs
                     )
                     ls_client.create_feedback(
                         run_id=response.langsmith_run_id,
                         key="context_precision",
                         score=precision,
-                        comment="Automated ClaimEye Context Precision evaluator",
+                        comment="Automated Kortex AI Context Precision evaluator",
                         **fb_kwargs
                     )
                 except Exception as ex:
@@ -351,7 +351,7 @@ class RAGEvaluator:
 
         n = len(BENCHMARK_DATASET)
         summary = {
-            "dataset_name": "claimeye-benchmark-v1",
+            "dataset_name": "kortex-benchmark-v1",
             "langsmith_dataset_id": langsmith_dataset_id,
             "total_samples": n,
             "mean_faithfulness": round(total_faithfulness / n, 4),
