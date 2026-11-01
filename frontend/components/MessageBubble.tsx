@@ -53,7 +53,7 @@ export function MessageBubble({ message, onViewSources }: MessageBubbleProps) {
         /* USER INQUIRY BLOCK */
         <div className="max-w-3xl ml-auto border border-border-strongLight dark:border-border-strongDark bg-surface-light dark:bg-surface-dark shadow-subtle">
           {/* User Header */}
-          <div className="flex items-center justify-between px-4 py-2 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
+          <div className="flex items-center justify-between px-4 py-2 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
             <div className="flex items-center space-x-2">
               <span className="font-semibold text-ink-primaryLight dark:text-ink-primaryDark uppercase">
                 INQUIRY // CLIENT
@@ -79,7 +79,7 @@ export function MessageBubble({ message, onViewSources }: MessageBubbleProps) {
         /* ASSISTANT DOSSIER BLOCK */
         <div className="max-w-4xl mr-auto border border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark shadow-subtle">
           {/* Assistant Header & Masthead */}
-          <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 border-b border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
+          <div className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5 border-b border-border-light dark:border-border-dark bg-canvas-light dark:bg-canvas-dark text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
             <div className="flex items-center space-x-2">
               <span className="w-2 h-2 bg-cobalt-DEFAULT dark:bg-cobalt-dark" />
               <span className="font-bold text-ink-primaryLight dark:text-ink-primaryDark uppercase tracking-wider">
@@ -112,7 +112,7 @@ export function MessageBubble({ message, onViewSources }: MessageBubbleProps) {
 
           {/* Assistant Telemetry Grid (Swiss Metadata Bar) */}
           {meta && (
-            <div className="px-4 py-2 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-mono text-ink-secondaryLight dark:text-ink-secondaryDark">
+            <div className="px-4 py-2 border-b border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono font-medium text-ink-secondaryLight dark:text-ink-secondaryDark">
               {meta.intent && (
                 <div>
                   <span className="text-ink-mutedLight dark:text-ink-mutedDark mr-1">INTENT:</span>
@@ -210,7 +210,7 @@ export function MessageBubble({ message, onViewSources }: MessageBubbleProps) {
                             {filename}
                           </span>
                         </span>
-                        <span className="text-[10px] px-1.5 py-0.5 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-ink-mutedLight dark:text-ink-mutedDark">
+                        <span className="text-xs px-2 py-0.5 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-ink-mutedLight dark:text-ink-mutedDark font-medium">
                           SCORE {chunk.score.toFixed(3)}
                         </span>
                       </div>
