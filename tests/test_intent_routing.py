@@ -96,7 +96,7 @@ def test_mixed_greeting_and_document_query_triggers_retrieval(router: IntentRout
         "Hello there, what is the fraud score threshold for expert review?",
         "Salut l'équipe, comment fonctionne le chiffrage des dommages ?",
         "عسلامة، قداش الفرانشيز متع الكرهبة في العقد ؟",
-        "Good morning, what are the monthly subscription pricing tiers for ClaimEye?",
+        "Good morning, what are the monthly subscription pricing tiers for Kortex AI?",
     ]
 
     for text in hybrid_queries:
