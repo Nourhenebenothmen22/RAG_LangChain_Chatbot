@@ -48,14 +48,14 @@ export function InputComposer({
   return (
     <div className="w-full max-w-4xl mx-auto px-4 pb-6 pt-2">
       {/* Configuration Strip (Technical Swiss Bar) */}
-      <div className="mb-2 flex items-center justify-between text-[11px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
+      <div className="mb-2 flex items-center justify-between text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
         <div className="flex items-center space-x-3">
           <button
             type="button"
             onClick={() => setShowConfig(!showConfig)}
-            className={`flex items-center space-x-1.5 px-2 py-0.5 border transition-colors ${
+            className={`flex items-center space-x-1.5 px-2 py-0.5 border focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark transition-colors ${
               showConfig
-                ? "border-cobalt-DEFAULT text-cobalt-DEFAULT dark:border-cobalt-dark dark:text-cobalt-dark bg-cobalt-subtleLight dark:bg-cobalt-subtleDark"
+                ? "border-cobalt-DEFAULT text-cobalt-DEFAULT dark:border-cobalt-dark dark:text-cobalt-dark bg-cobalt-subtleLight dark:bg-cobalt-subtleDark font-semibold"
                 : "border-border-light dark:border-border-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:border-border-strongLight dark:hover:border-border-strongDark"
             }`}
           >
@@ -81,7 +81,7 @@ export function InputComposer({
           </span>
         </div>
 
-        <div className="hidden sm:flex items-center space-x-1 text-[10px]">
+        <div className="hidden sm:flex items-center space-x-1 text-xs font-mono">
           <span>SUBMIT WITH</span>
           <kbd className="px-1.5 py-0.5 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-ink-primaryLight dark:text-ink-primaryDark font-mono">
             ↵ ENTER
@@ -93,7 +93,7 @@ export function InputComposer({
       {showConfig && (
         <div className="mb-3 p-3 border border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark text-xs font-mono grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-in">
           <div>
-            <span className="block text-[10px] text-ink-mutedLight dark:text-ink-mutedDark uppercase mb-1.5">
+            <span className="block text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark uppercase mb-1.5">
               01 // RETRIEVAL DEPTH (TOP-K)
             </span>
             <div className="flex space-x-2">
@@ -102,7 +102,7 @@ export function InputComposer({
                   key={k}
                   type="button"
                   onClick={() => setTopK(k)}
-                  className={`px-3 py-1 border text-xs font-mono transition-colors ${
+                  className={`px-3 py-1 border text-xs font-mono font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark ${
                     topK === k
                       ? "border-cobalt-DEFAULT bg-cobalt-DEFAULT text-white dark:border-cobalt-dark dark:bg-cobalt-dark"
                       : "border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark text-ink-secondaryLight dark:text-ink-secondaryDark hover:border-border-strongLight dark:hover:border-border-strongDark"
@@ -115,13 +115,13 @@ export function InputComposer({
           </div>
 
           <div>
-            <span className="block text-[10px] text-ink-mutedLight dark:text-ink-mutedDark uppercase mb-1.5">
+            <span className="block text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark uppercase mb-1.5">
               02 // CROSS-ENCODER RERANKING
             </span>
             <button
               type="button"
               onClick={() => setRerank(!rerank)}
-              className={`px-3 py-1 border text-xs font-mono transition-colors ${
+              className={`px-3 py-1 border text-xs font-mono font-medium transition-colors focus:outline-none focus:ring-1 focus:ring-cobalt-DEFAULT dark:focus:ring-cobalt-dark ${
                 rerank
                   ? "border-emerald-DEFAULT bg-emerald-subtleLight dark:bg-emerald-subtleDark text-emerald-DEFAULT"
                   : "border-border-light dark:border-border-dark bg-surface-light dark:bg-surface-dark text-ink-mutedLight dark:text-ink-mutedDark"
@@ -134,20 +134,20 @@ export function InputComposer({
       )}
 
       {/* Main Composer Box */}
-      <div className="relative border border-border-strongLight dark:border-border-strongDark focus-within:border-cobalt-DEFAULT dark:focus-within:border-cobalt-dark bg-surface-light dark:bg-surface-dark transition-colors shadow-subtle">
+      <div className="relative border border-border-strongLight dark:border-border-strongDark focus-within:border-cobalt-DEFAULT dark:focus-within:border-cobalt-dark focus-within:ring-1 focus-within:ring-cobalt-DEFAULT dark:focus-within:ring-cobalt-dark bg-surface-light dark:bg-surface-dark transition-colors shadow-subtle">
         <textarea
           ref={textareaRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Formulate an insurance inquiry, verify policy clauses, or test fraud conditions..."
+          placeholder="Formulate an inquiry, verify policy clauses, contracts, or technical specifications..."
           rows={1}
           className="w-full bg-transparent resize-none border-0 px-4 py-3 text-sm md:text-base text-ink-primaryLight dark:text-ink-primaryDark placeholder:text-ink-mutedLight dark:placeholder:text-ink-mutedDark focus:outline-none focus:ring-0 max-h-44"
         />
 
         {/* Action Button Row */}
         <div className="flex items-center justify-between px-3 py-2 border-t border-border-light dark:border-border-dark bg-surface-subtleLight dark:bg-surface-subtleDark">
-          <span className="text-[10px] font-mono text-ink-mutedLight dark:text-ink-mutedDark">
+          <span className="text-xs font-mono font-medium text-ink-mutedLight dark:text-ink-mutedDark">
             QUERY DOSSIER COMPOSER
           </span>
 
